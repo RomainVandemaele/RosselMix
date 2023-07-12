@@ -12,6 +12,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import be.compose.rosselmix.data.NewsFeedFetcher
+import be.compose.rosselmix.ui.sections.NewsFeed
 import be.compose.rosselmix.ui.theme.RosselMixTheme
 import com.rometools.rome.io.SyndFeedInput
 import kotlinx.coroutines.CoroutineScope
@@ -30,10 +31,11 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val coroutineScope = rememberCoroutineScope()
                     coroutineScope.launch {
-                        NewsFeedFetcher().fetchNewsFeed()
+                        NewsFeedFetcher().downloadXml()
                     }
 
-                    Greeting("Android")
+                    //Greeting("Android")
+                    NewsFeed()
 
                 }
             }

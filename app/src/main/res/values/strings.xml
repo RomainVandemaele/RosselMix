@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">RosselMix</string>
+    <string name="rss_date_format">EEE, d MMM yyyy HH:mm:ss Z</string>
+    <string name="connection_error">Could not connect to fetch the news</string>
+    <string name="xml_error">The news were not formated correctly\n</string>
 </resources>
