@@ -3,4 +3,5 @@
     <string name="rss_date_format">EEE, d MMM yyyy HH:mm:ss Z</string>
     <string name="connection_error">Could not connect to fetch the news</string>
     <string name="xml_error">The news were not formated correctly\n</string>
+    <string name="author_prefix">Par </string>
 </resources>

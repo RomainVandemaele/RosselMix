@@ -22,34 +22,6 @@ class NewsFeedFetcher {
     private val url = "https://www.lesoir.be/rss2/2/cible_principale?status=1"
 
 
-    suspend fun fetchNewsFeed() {
-        coroutineScope {
-            withContext(Dispatchers.IO) {
-                val feed = mutableListOf<News>()
-//                URL(url).openStream().use { stream ->
-//                    val input = SyndFeedInput()
-//                    val feed = input.build(XmlReader(stream))
-//                    feed.entries.forEach {
-//                        val news = it.toNews()
-//                        feed.add(news)
-//                        Log.d("READ RSS",it.title)
-//                    }
-//                }
-                val stream = XmlReader(URL(url))
-                Log.d("READ RSS",stream.toString())
-                //val stream = SyndFeedInput().build(XmlReader(URL(url)))
-
-                //stream.entries.forEach {
-                    //val news = it.toNews()
-                    //feed.add(news)
-                    //Log.d("READ RSS",it.title)
-                }
-                //val news = feed.toNews()
-                //Log.d("READ RSS",feed.publishedDate.toString())
-            }
-    }
-
-
 
     public suspend fun downloadXml() {
         var result: String? = null
@@ -80,13 +52,8 @@ class NewsFeedFetcher {
 // HTML markup. Returns HTML string.
     @Throws(XmlPullParserException::class, IOException::class)
     private fun loadXmlFromNetwork(urlString: String): String {
-        // Checks whether the user set the preference to include summary text.
 
         val stream = downloadUrl(urlString)
-        if(stream == null) {
-            Log.d("READ RSS","connection error")
-        }
-
         val entries : List<News> = NewsParser().parse(stream!!) ?: emptyList()
 //        val entries: List<News> = downloadUrl(urlString)?.use { stream ->
 //            // Instantiates the parser.
@@ -125,33 +92,3 @@ class NewsFeedFetcher {
 
 }
 
-
-
-fun SyndEntry.toNews()  : News {
-
-    //val mediaInfo = getModule(mediaURI) as com.rometools.modules.mediarss.MediaEntryModule
-
-
-    val thumbnail  = this.findRelatedLink("media.thumbnail")?.href.toString() ?: "none"
-
-
-    val n =  News(
-        category = this.categories.first().name,
-        title = this.title,
-        description = this.description.value,
-        url = this.link,
-        //thumbnailUrl = this.enclosures.first().url ?: "",
-        date = this.publishedDate,
-        author = this.author
-    )
-
-    Log.d("READ RSS",n.category)
-    Log.d("READ RSS",n.title)
-    Log.d("READ RSS",n.description)
-    Log.d("READ RSS",n.url)
-    Log.d("READ RSS", n.date.toString())
-    Log.d("READ RSS",thumbnail)
-    Log.d("READ RSS",n.author.toString())
-    Log.d("READ RSS","------------------")
-    return n
-}

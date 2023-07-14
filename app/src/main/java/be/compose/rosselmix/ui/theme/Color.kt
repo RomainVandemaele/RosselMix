@@ -13,6 +13,6 @@ val Pink40 = Color(0xFF7D5260)
 //Le soir colors
 val Gold = Color(0XFFFDC800)
 val DarkBlue = Color(0XFF003978)
-val lightBlue = Color(0xFF7C98B1)
+val LightBlue = Color(0xFF7C98B1)
 val White = Color(0XFFFFFFFF)
 val Black = Color(0XFF000000)

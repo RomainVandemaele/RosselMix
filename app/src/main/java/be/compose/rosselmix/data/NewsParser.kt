@@ -127,6 +127,7 @@ class NewsParser {
         if( tag == THUMBNAIL) {
             if(type == "image/jpeg" ) {
                 thumbnailUrl = parser.getAttributeValue(null, "url")
+                thumbnailUrl = thumbnailUrl.replace("extra_big", "medium")
                 parser.nextTag()
                 while (parser.name != THUMBNAIL) { parser.nextTag() }
             }
