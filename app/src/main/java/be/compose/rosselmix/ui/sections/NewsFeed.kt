@@ -17,9 +17,11 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -36,7 +38,9 @@ import com.bumptech.glide.integration.compose.GlideImage
 private const val URL = "https://leseng.rosselcdn.net/sites/default/files/dpistyles_v2/ena_16_9_medium/2023/07/13/node_525253/30290591/public/2023/07/13/b9730411500z.1_20220328074704_000%2Bg3kk6gif9.1-0.jpeg?itok=J3loYTOu1689231371"
 
 @Composable
-fun NewsFeed() {
+fun NewsFeed(
+    viewModel: NewsFeedViewModel
+) {
     Column {
         Text(
             text = "News Feed",
@@ -45,15 +49,33 @@ fun NewsFeed() {
             fontSize = MaterialTheme.typography.bodyLarge.fontSize,
             textAlign = TextAlign.Center
         )
-        LazyColumn {
-            items(10) {
-                Column {
-                    NewsItem("Nothing happened", URL,"BELGA")
-                    NewsDivider()
+        val state by  viewModel.state
+
+        if(state.loading) {
+            LoadingScreen()
+        }else {
+            val news = state.newsFeed
+            LazyColumn {
+                items(news.size) { i ->
+                    Column {
+                        NewsItem(news[i].title, news[i].thumbnailUrl,news[i].author ?: "")
+                        NewsDivider()
+                    }
                 }
             }
         }
+
+
     }
+}
+
+
+@Composable
+fun LoadingScreen() {
+    Image(
+        painter = painterResource(id = R.drawable.lesoir),
+        contentDescription = "Loading screen with the logo of Le Soir",
+    )
 }
 
 @OptIn(ExperimentalGlideComposeApi::class)
@@ -87,7 +109,8 @@ fun NewsItem(
         AsyncImage(
             model = thumbnailUrl,
             contentDescription = "News illustration",
-            modifier = Modifier.weight(0.5f)
+            modifier = Modifier.weight(0.5f),
+            error = painterResource(id = R.drawable.lesoir) //placeholder
             )
 
     }

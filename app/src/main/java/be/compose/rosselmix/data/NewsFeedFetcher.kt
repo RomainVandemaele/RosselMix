@@ -1,14 +1,6 @@
 package be.compose.rosselmix.data
 
-import android.preference.PreferenceManager
-import android.util.Log
-import androidx.compose.ui.res.stringResource
-import be.compose.rosselmix.R
 import be.compose.rosselmix.data.model.News
-import com.rometools.rome.feed.synd.SyndEntry
-import com.rometools.rome.io.SyndFeedInput
-import com.rometools.rome.io.XmlReader
-import com.rometools.rome.io.impl.Atom10Parser
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
@@ -18,13 +10,23 @@ import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
 
+
+data class FetcherResponse(
+    var news: List<News> = emptyList(),
+    var errorMessage: String? = null
+
+    )
+
 class NewsFeedFetcher {
     private val url = "https://www.lesoir.be/rss2/2/cible_principale?status=1"
 
 
 
-    public suspend fun downloadXml() {
-        var result: String? = null
+    public suspend fun downloadXml(
+        callback: (r : FetcherResponse) -> Unit
+    )
+    {
+        var result: FetcherResponse
 
         coroutineScope {
             withContext(Dispatchers.IO) {
@@ -32,15 +34,15 @@ class NewsFeedFetcher {
                     loadXmlFromNetwork(url)
                 }catch (e : IOException) {
                     //stringResource(id = R.string.connection_error)
-                    "No connection"
+                    FetcherResponse(errorMessage = "No connection")
                 }catch( e: XmlPullParserException)  {
-                    //stringResource(id = R.string.xml_error)
-                    "Wrong XML"
+                    FetcherResponse(errorMessage = "Wrong XML")
+                }catch (e: Exception) {
+                    FetcherResponse(errorMessage = "Unknown error")
                 }
-                withContext(Dispatchers.Main) {
+                callback(result)
 
-                    //result?.let { parseXml(it) }
-                }
+                //withContext(Dispatchers.Main) { //result?.let { parseXml(it) } }
             }
         }
 
@@ -51,27 +53,11 @@ class NewsFeedFetcher {
     // Uploads XML from stackoverflow.com, parses it, and combines it with
 // HTML markup. Returns HTML string.
     @Throws(XmlPullParserException::class, IOException::class)
-    private fun loadXmlFromNetwork(urlString: String): String {
+    private fun loadXmlFromNetwork(urlString: String): FetcherResponse {
 
         val stream = downloadUrl(urlString)
         val entries : List<News> = NewsParser().parse(stream!!) ?: emptyList()
-//        val entries: List<News> = downloadUrl(urlString)?.use { stream ->
-//            // Instantiates the parser.
-//            NewsParser().parse(stream)
-//        } ?: emptyList()
-
-        entries.forEach {n ->
-            Log.d("READ RSS",n.category)
-            Log.d("READ RSS",n.title)
-            Log.d("READ RSS",n.description)
-            Log.d("READ RSS",n.url)
-            Log.d("READ RSS", n.date.toString())
-            Log.d("READ RSS",n.thumbnailUrl)
-            Log.d("READ RSS",n.author.toString())
-            Log.d("READ RSS","------------------")
-        }
-
-        return "ok"
+        return FetcherResponse(entries)
     }
 
     // Given a string representation of a URL, sets up a connection and gets
