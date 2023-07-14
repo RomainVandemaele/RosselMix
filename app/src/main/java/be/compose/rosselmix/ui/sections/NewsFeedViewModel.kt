@@ -14,6 +14,7 @@ import kotlinx.coroutines.launch
 class NewsFeedViewModel : ViewModel() {
 
     private val selectedCategory = MutableStateFlow(Category.BREAKING)
+    private val selectedUrl: MutableStateFlow<String?> = MutableStateFlow(null)
 
     private val _state = mutableStateOf<NewsFeedViewState>(NewsFeedViewState())
     val state : State<NewsFeedViewState>
@@ -47,6 +48,11 @@ class NewsFeedViewModel : ViewModel() {
         }
     }
 
+    fun selectArticle(url: String?) {
+        selectedUrl.value = url
+        _state.value = _state.value.copy(selectedArticle = selectedUrl.value)
+    }
+
 
 }
 
@@ -59,6 +65,7 @@ class NewsFeedViewModel : ViewModel() {
 data class NewsFeedViewState(
     val newsFeed: List<News> = emptyList(),
     val selectedCategory: Category = Category.BREAKING,
+    val selectedArticle: String? = null,
     val loading: Boolean = true,
     val errorMessage: String? = null
 )
