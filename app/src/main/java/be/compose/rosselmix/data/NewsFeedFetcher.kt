@@ -14,16 +14,19 @@ import java.net.URL
 data class FetcherResponse(
     var news: List<News> = emptyList(),
     var errorMessage: String? = null
-
-    )
+)
 
 class NewsFeedFetcher {
-    private val url = "https://www.lesoir.be/rss2/2/cible_principale?status=1"
+
+
+    private val URL_BASE_ = "https://www.lesoir.be/rss2/"
+    private val URL_ADD_ON = "/cible_principale?status=1"
 
 
 
     public suspend fun downloadXml(
-        callback: (r : FetcherResponse) -> Unit
+        callback: (r: FetcherResponse) -> Unit,
+        code: Int
     )
     {
         var result: FetcherResponse
@@ -31,7 +34,7 @@ class NewsFeedFetcher {
         coroutineScope {
             withContext(Dispatchers.IO) {
                 result = try {
-                    loadXmlFromNetwork(url)
+                    loadXmlFromNetwork(code)
                 }catch (e : IOException) {
                     //stringResource(id = R.string.connection_error)
                     FetcherResponse(errorMessage = "No connection")
@@ -53,9 +56,9 @@ class NewsFeedFetcher {
     // Uploads XML from stackoverflow.com, parses it, and combines it with
 // HTML markup. Returns HTML string.
     @Throws(XmlPullParserException::class, IOException::class)
-    private fun loadXmlFromNetwork(urlString: String): FetcherResponse {
+    private fun loadXmlFromNetwork(code: Int): FetcherResponse {
 
-        val stream = downloadUrl(urlString)
+        val stream = downloadUrl("$URL_BASE_$code$URL_ADD_ON")
         val entries : List<News> = NewsParser().parse(stream!!) ?: emptyList()
         return FetcherResponse(entries)
     }

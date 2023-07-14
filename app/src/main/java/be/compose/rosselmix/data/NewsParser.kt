@@ -84,13 +84,17 @@ class NewsParser {
                 URL -> url = retrieveString(parser, URL)
                 THUMBNAIL -> thumbnailUrl = readThumbnailUrl(parser)
                 DATE -> date = readDate(parser)
-                AUTHOR -> author = retrieveString(parser, AUTHOR)
+                AUTHOR -> author = retrieveAuthor(parser, AUTHOR)
                 else -> skip(parser)
             }
 
         }
         return News(category, title, description, url, thumbnailUrl, date, author)
     }
+
+    private fun retrieveAuthor(parser: XmlPullParser, tag : String): String =  retrieveString(parser, AUTHOR).replace("\"", "")
+
+
 
     private fun readText(parser: XmlPullParser): String {
         var result = ""
