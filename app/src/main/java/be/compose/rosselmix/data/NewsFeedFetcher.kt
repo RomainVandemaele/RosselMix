@@ -68,6 +68,7 @@ class NewsFeedFetcher {
     @Throws(IOException::class)
     private fun downloadUrl(urlString: String): InputStream? {
         val url = URL(urlString)
+        
         return (url.openConnection() as? HttpURLConnection)?.run {
             readTimeout = 10000
             connectTimeout = 15000

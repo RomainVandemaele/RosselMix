@@ -3,6 +3,8 @@ package be.compose.rosselmix.ui.sections
 import android.content.Intent
 import android.net.Uri
 import android.util.Log
+import android.webkit.WebViewClient
+import android.webkit.WebView
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -33,6 +35,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat.startActivity
 import be.compose.rosselmix.R
 import be.compose.rosselmix.ui.theme.DarkBlue
@@ -127,15 +130,25 @@ fun LoadingScreen() {
 
 @Composable
 fun WebViewArticle(url: String, onDispose: () -> Unit) {
-    
+
     val state = rememberWebViewState(url)
-    WebView(
-        state = state,
-        //onCreated = {it.settings.javaScriptEnabled = true},
-        captureBackPresses = false,
-        onCreated = { it.settings.javaScriptEnabled = true },
-        onDispose = { Log.d("DISPOSE","disposed");onDispose() }
-    )
+
+    AndroidView(factory = {
+        WebView(it).apply {
+            webViewClient = WebViewClient()
+            loadUrl(url)
+        }
+
+    })
+    
+    //val state = rememberWebViewState(url)
+//    WebView(
+//        state = state,
+//        //onCreated = {it.settings.javaScriptEnabled = true},
+//        captureBackPresses = false,
+//        onCreated = { it.settings.javaScriptEnabled = true },
+//        onDispose = { Log.d("DISPOSE","disposed");onDispose() }
+//    )
 
 }
 
@@ -152,10 +165,10 @@ fun NewsItem(
         modifier = Modifier
             .padding(16.dp)
             .clickable(onClick = {
-                val webpage: Uri = Uri.parse("https://www.lesoir.be/525628/article/2023-07-14/reforme-fiscale-voici-ce-qui-est-sur-la-table-ce-samedi")
-                val intent = Intent(Intent.ACTION_VIEW, webpage)
-                startActivity(context,intent,null)
-                //TODO onItemClick()
+//                val webpage: Uri = Uri.parse("https://www.lesoir.be/525628/article/2023-07-14/reforme-fiscale-voici-ce-qui-est-sur-la-table-ce-samedi")
+//                val intent = Intent(Intent.ACTION_VIEW, webpage)
+//                startActivity(context,intent,null)
+                onItemClick()
             }),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
