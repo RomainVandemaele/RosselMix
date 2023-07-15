@@ -24,6 +24,7 @@ interface NewsDao {
     @Insert(onConflict = androidx.room.OnConflictStrategy.REPLACE)
     suspend fun insert(news: News)
 
-    @Delete
-    suspend fun delete(news: News)
+
+    @Query("DELETE FROM $TABLE_NAME WHERE $COLUMN_TITLE = :title")
+    suspend fun delete(title: String)
 }

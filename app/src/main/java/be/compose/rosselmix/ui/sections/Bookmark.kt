@@ -30,10 +30,11 @@ fun BookmarkScreen(news: List<News>) {
             NewsItem(
                 news[it].title,
                 news[it].thumbnailUrl,
-                news[it].author)
-            {
-                //TODO
-            }
+                news[it].author,
+                onItemClick = {},
+                onBookmarkClick = {})
+
+
             NewsDivider()
         }
     }

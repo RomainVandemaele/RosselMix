@@ -1,6 +1,7 @@
 package be.compose.rosselmix.ui.sections
 
 import android.content.Intent
+import android.widget.Toast
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsTopHeight
@@ -72,6 +74,7 @@ fun NewsFeed(
 
 
         val state by  viewModel.state.collectAsState()
+        val context = LocalContext.current
 
 
         if(state.loading) {
@@ -94,13 +97,17 @@ fun NewsFeed(
                                     news[i].title,
                                     news[i].thumbnailUrl,
                                     news[i].author,
-                                    onItemClick = {viewModel.selectArticle(news[i].url) })
+                                    onItemClick = {viewModel.selectArticle(news[i].url) },
+                                    onBookmarkClick = {viewModel.bookMarkNews(context, news[i]) }
+                                )
                             }else {
                                 NewsItem(
                                     news[i].title,
                                     news[i].thumbnailUrl,
                                     news[i].author,
-                                    onItemClick = {viewModel.selectArticle(news[i].url) })
+                                    onItemClick = {viewModel.selectArticle(news[i].url) },
+                                    onBookmarkClick = {viewModel.bookMarkNews(context, news[i]) }
+                                )
                             }
                             NewsDivider()
                         }
@@ -170,13 +177,7 @@ fun LoadingScreen(modifier: Modifier = Modifier) {
         )
         progress = ( progress  + 0.1f) % 1f
     }
-//    Image(
-//        painter = painterResource(id = R.drawable.load_screen),
-//        contentDescription = "Loading screen with the logo of Le Soir",
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .fillMaxHeight()
-//    )
+
 }
 
 @Composable
@@ -238,11 +239,16 @@ fun share(data : String) {
 
 @Composable
 fun MainNews(
-    title : String,
-    thumbnailUrl : String,
+    title: String,
+    thumbnailUrl: String,
     author: String?,
-    onItemClick: () -> Unit)
+    onItemClick: () -> Unit,
+    onBookmarkClick: () -> Unit
+)
 {
+    val context = LocalContext.current
+    val bookmarkText = stringResource(id = R.string.bookmarked_message)
+
     Column(
         verticalArrangement = Arrangement.spacedBy(8.dp),
         modifier = Modifier
@@ -257,6 +263,10 @@ fun MainNews(
             error = painterResource(id = R.drawable.lesoir) //placeholder
         )
 
+
+        //TitleAndAuthor(title = titl, author = author, modifier = Modifier())
+
+
         Text(
             text = title,
             style = MaterialTheme.typography.headlineMedium,
@@ -264,12 +274,34 @@ fun MainNews(
 
         )
 
-        Text(
-            text =  if ( author.isNullOrBlank())"" else "${stringResource(id = R.string.author_prefix)} $author",
-            style = MaterialTheme.typography.bodySmall,
-            color = DarkBlue,
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
             modifier = Modifier.padding(horizontal = 16.dp)
-        )
+        ) {
+            IconButton(
+                onClick = {
+                    onBookmarkClick()
+                    Toast.makeText(context, bookmarkText, Toast.LENGTH_LONG).show()
+                          } ,
+                modifier = Modifier.size(28.dp)
+            ) {
+                Icon( painterResource(id = R.drawable.ic_bookmark_foreground), contentDescription = "Share", tint = DarkBlue)
+
+            }
+            Text(
+                text =  if ( author.isNullOrBlank())"" else "${stringResource(id = R.string.author_prefix)} $author",
+                style = MaterialTheme.typography.bodySmall,
+                color = DarkBlue
+            )
+        }
+
+//        Text(
+//            text =  if ( author.isNullOrBlank())"" else "${stringResource(id = R.string.author_prefix)} $author",
+//            style = MaterialTheme.typography.bodySmall,
+//            color = DarkBlue,
+//            modifier = Modifier.padding(horizontal = 16.dp)
+//        )
 
         Spacer(modifier = Modifier.height(8.dp))
     }
@@ -277,12 +309,15 @@ fun MainNews(
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun NewsItem(
-    title : String,
-    thumbnailUrl : String,
+    title: String,
+    thumbnailUrl: String,
     author: String?,
-    onItemClick: () -> Unit)
+    onItemClick: () -> Unit,
+    onBookmarkClick: () -> Unit
+)
 {
-    val context = LocalContext.current
+
+
     Row(
         modifier = Modifier
             .padding(16.dp)
@@ -294,22 +329,7 @@ fun NewsItem(
 
 
     ) {
-        Column (
-            modifier = Modifier.weight(1f)
-        ) {
-            Text(
-                text = title,
-                maxLines = 3,
-                style = MaterialTheme.typography.headlineMedium,
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text =  if ( author.isNullOrBlank())"" else "${stringResource(id = R.string.author_prefix)} $author",
-                style = MaterialTheme.typography.bodySmall,
-                color = DarkBlue
-            )
-        }
-
+        TitleAndAuthor(title = title, author = author, modifier = Modifier.weight(1f), onBookmarkClick = onBookmarkClick)
         Spacer(modifier = Modifier.width(10.dp))
 
         AsyncImage(
@@ -331,6 +351,39 @@ fun NewsItem(
 
 }
 
+
+@Composable
+fun TitleAndAuthor(title: String, author: String?, modifier: Modifier, onBookmarkClick: () -> Unit) {
+    val context = LocalContext.current
+    val bookmarkText = stringResource(id = R.string.bookmarked_message)
+
+    Column(
+        modifier = modifier
+    ) {
+        Text(
+            text = title,
+            maxLines = 3,
+            style = MaterialTheme.typography.headlineMedium,
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            IconButton(onClick = { onBookmarkClick(); Toast.makeText(context,bookmarkText,Toast.LENGTH_LONG).show() } , modifier = Modifier.size(20.dp)) {
+                Icon( painterResource(id = R.drawable.ic_bookmark_foreground), contentDescription = "Bookmark", tint = DarkBlue)
+
+            }
+            Text(
+                text =  if ( author.isNullOrBlank())"" else "${stringResource(id = R.string.author_prefix)} $author",
+                style = MaterialTheme.typography.bodySmall,
+                color = DarkBlue
+            )
+        }
+
+    }
+}
+
 @Composable
 fun NewsDivider() {
     Divider(
@@ -344,5 +397,5 @@ fun NewsDivider() {
 @Preview
 fun NewsItemPreview() {
     val URL = "https://leseng.rosselcdn.net/sites/default/files/dpistyles_v2/ena_16_9_medium/2023/07/13/node_525253/30290591/public/2023/07/13/b9730411500z.1_20220328074704_000%2Bg3kk6gif9.1-0.jpeg?itok=J3loYTOu1689231371"
-    NewsItem("Nothing happened", URL,"BELGA", {  })
+    NewsItem("Nothing happened", URL, "BELGA", {  }, {  } )
 }

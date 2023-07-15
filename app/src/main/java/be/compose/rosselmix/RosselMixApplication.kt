@@ -11,11 +11,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import be.compose.rosselmix.data.Room.RosselMixDatabase
 import be.compose.rosselmix.ui.navigation.Destinations
 import be.compose.rosselmix.ui.navigation.RosselMoxNavGraph
 import be.compose.rosselmix.ui.theme.DarkBlue
@@ -37,6 +39,8 @@ fun RosselMixApp() {
             Destinations.NEWSPAPER,
             Destinations.BOOKMARKS
         )
+        //instanciate the database
+        RosselMixDatabase.instance(LocalContext.current)
 
         Scaffold(
             bottomBar = {

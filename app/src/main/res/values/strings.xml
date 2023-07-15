@@ -9,4 +9,5 @@
     <string name="lastest">Le fil info</string>
     <string name="newspaper">Le journal</string>
     <string name="bookmarks">Mes articles</string>
+    <string name="bookmarked_message">Cette article est ajouté à vos articles</string>
 </resources>
