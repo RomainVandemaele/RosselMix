@@ -2,7 +2,6 @@ package be.compose.rosselmix.ui.sections
 
 import android.content.Intent
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -11,7 +10,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -36,7 +34,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -51,7 +48,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
-import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavHostController
 import be.compose.rosselmix.R
 import be.compose.rosselmix.ui.theme.DarkBlue
@@ -64,7 +60,6 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.google.accompanist.web.WebView
 import com.google.accompanist.web.rememberWebViewState
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.google.android.material.progressindicator.CircularProgressIndicator
 
 
 @Composable

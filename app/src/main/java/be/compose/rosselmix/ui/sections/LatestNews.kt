@@ -6,18 +6,14 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.CheckCircle
-import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -37,9 +33,7 @@ import be.compose.rosselmix.data.model.News
 import be.compose.rosselmix.ui.theme.DarkBlue
 import coil.compose.AsyncImage
 import java.util.Date
-import kotlin.time.Duration.Companion.hours
 import kotlin.time.ExperimentalTime
-import kotlin.time.minutes
 
 @Composable
 fun LastestNews(
@@ -80,7 +74,7 @@ fun NewsList(
     onClick : (String) -> Unit = {} ) {
     LazyColumn() {
         items(news.size) {
-            NewsItem(
+            LatestNewsItem(
                 news[it].title,
                 news[it].thumbnailUrl,
                 news[it].date,
@@ -95,7 +89,7 @@ fun NewsList(
 
 @OptIn(ExperimentalTime::class)
 @Composable
-fun NewsItem(
+fun LatestNewsItem(
     title: String,
     thumbnailUrl: String,
     date: Date,
@@ -210,7 +204,7 @@ fun HeaderPreview() {
 @Composable
 @Preview
 fun NewsPreview() {
-    NewsItem(
+    LatestNewsItem(
         "Title",
         "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png",
         Date(),
