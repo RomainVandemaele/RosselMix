@@ -1,23 +1,24 @@
 package be.compose.rosselmix
 
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import be.compose.rosselmix.ui.navigation.Destinations
-import be.compose.rosselmix.ui.sections.Bookmark
-import be.compose.rosselmix.ui.sections.LastestNews
-import be.compose.rosselmix.ui.sections.NewsFeed
-import be.compose.rosselmix.ui.sections.NewsFeedViewModel
-import be.compose.rosselmix.ui.sections.NewsPaper
+import be.compose.rosselmix.ui.navigation.RosselMoxNavGraph
+import be.compose.rosselmix.ui.theme.DarkBlue
 import be.compose.rosselmix.ui.theme.RosselMixTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -27,29 +28,66 @@ fun RosselMixApp() {
     RosselMixTheme {
 
         val navController = rememberNavController()
-        val coroutineScope = rememberCoroutineScope()
-
-
         val navBackStackEntry by navController.currentBackStackEntryAsState()
 
 
-        NavHost(navController = navController, startDestination = Destinations.NEWS_ROUTE) {
-            composable(Destinations.NEWS_ROUTE) { NewsFeed(NewsFeedViewModel(),navController) }
-            composable(Destinations.LASTEST_ROUTE) { LastestNews(navController) }
-            composable(Destinations.NEWSPAPER_ROUTE) { NewsPaper(navController) }
-            composable(Destinations.BOOKMARKS_ROUTE) { Bookmark(navController) }
-            //TODO: add other routes like webview and pdfview with url as parameter
+        val items = listOf(
+            Destinations.NEWS,
+            Destinations.LATEST_NEWS,
+            Destinations.NEWSPAPER,
+            Destinations.BOOKMARKS
+        )
+
+        Scaffold(
+            bottomBar = {
+                NavigationBar {
+                    items.forEach { item ->
+                        NavigationBarItem(
+                            icon = {
+                                Icon(
+                                    painter = painterResource(id = item.iconId),
+                                    contentDescription = item.route,
+                                    tint = DarkBlue,
+                                    modifier = Modifier.size(28.dp)
+                                )
+                            },
+                            label = {
+                                Text(
+                                    text = stringResource(id = item.stringId),
+                                    style = MaterialTheme.typography.labelMedium,
+                                    color = DarkBlue
+                                )
+                            },
+                            selected = navBackStackEntry?.destination?.route == item.route,
+                            onClick = {
+                                navController.navigate(item.route) {
+                                    // Pop up to the start destination of the graph to
+                                    // avoid building up a large stack of destinations
+                                    // on the back stack as users select items
+                                    popUpTo(navController.graph.startDestinationId)
+                                    // Avoid multiple copies of the same destination when
+                                    // reselecting the same item
+                                    launchSingleTop = true
+                                    // Restore state when reselecting a previously selected item
+                                    restoreState = true
+                                }
+                            }
+                        )
+                    }
+                }
+            }
+        ) {innerpadding ->
+            RosselMoxNavGraph(navController = navController,innerpadding)
         }
-        //Scaffold() {}
 
         // A surface container using the 'background' color from the theme
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
-        ) {
-            NewsFeed(NewsFeedViewModel(), navController)
-
-        }
+//        Surface(
+//            modifier = Modifier.fillMaxSize(),
+//            color = MaterialTheme.colorScheme.background
+//        ) {
+//            NewsFeed(NewsFeedViewModel(), navController)
+//
+//        }
     }
 
 }

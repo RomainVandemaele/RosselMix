@@ -41,6 +41,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
+import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavHostController
 import be.compose.rosselmix.R
 import be.compose.rosselmix.ui.theme.DarkBlue
@@ -60,6 +61,8 @@ fun NewsFeed(
     navController: NavHostController
 ) {
     Column {
+
+        val viewModel = NewsFeedViewModel()
 
         val state by  viewModel.state
         //WebViewArticle(url = "https://www.lesoir.be/525628/article/2023-07-14/reforme-fiscale-voici-ce-qui-est-sur-la-table-ce-samedi")
@@ -255,9 +258,6 @@ fun NewsItem(
         modifier = Modifier
             .padding(16.dp)
             .clickable(onClick = {
-//                val webpage: Uri = Uri.parse("https://www.lesoir.be/525628/article/2023-07-14/reforme-fiscale-voici-ce-qui-est-sur-la-table-ce-samedi")
-//                val intent = Intent(Intent.ACTION_VIEW, webpage)
-//                startActivity(context,intent,null)
                 onItemClick()
             }),
         horizontalArrangement = Arrangement.SpaceBetween,
