@@ -5,4 +5,8 @@
     <string name="xml_error">The news were not formated correctly\n</string>
     <string name="author_prefix">Par </string>
     <string name="journal_name">Le Soir</string>
+    <string name="news">La Une</string>
+    <string name="lastest">Le fil info</string>
+    <string name="newspaper">Le journal</string>
+    <string name="bookmarks">Mes articles</string>
 </resources>
