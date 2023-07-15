@@ -60,6 +60,13 @@ val RosselMixTypography = Typography(
         letterSpacing = 0.15.sp
     ),
 
+    labelSmall = TextStyle(
+        fontFamily = Miller,
+        fontWeight = FontWeight.Medium,
+        fontSize = 9.sp,
+        letterSpacing = 0.4.sp
+    ),
+
     labelMedium = TextStyle(
         fontFamily = Miller,
         fontWeight = FontWeight.Medium,

@@ -37,6 +37,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -76,7 +77,7 @@ fun NewsFeed(
 
 
         val state by  viewModel.state.collectAsState()
-        //WebViewArticle(url = "https://www.lesoir.be/525628/article/2023-07-14/reforme-fiscale-voici-ce-qui-est-sur-la-table-ce-samedi")
+
 
         if(state.loading) {
             LoadingScreen()
@@ -159,7 +160,7 @@ fun LoadingScreen(modifier: Modifier = Modifier) {
             .fillMaxSize()
             .wrapContentSize(Alignment.Center)
     ) {
-        var progress by remember { mutableStateOf(0.1f) }
+        var progress by rememberSaveable { mutableStateOf(0.1f) }
         val animatedProgress by animateFloatAsState(
             targetValue = progress,
             animationSpec = ProgressIndicatorDefaults.ProgressAnimationSpec
@@ -172,15 +173,15 @@ fun LoadingScreen(modifier: Modifier = Modifier) {
                 .width(50.dp)
                 .height(50.dp)
         )
-        progress += 0.1f
+        progress = ( progress  + 0.1f) % 1f
     }
-    Image(
-        painter = painterResource(id = R.drawable.load_screen),
-        contentDescription = "Loading screen with the logo of Le Soir",
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight()
-    )
+//    Image(
+//        painter = painterResource(id = R.drawable.load_screen),
+//        contentDescription = "Loading screen with the logo of Le Soir",
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .fillMaxHeight()
+//    )
 }
 
 @Composable
@@ -303,6 +304,7 @@ fun NewsItem(
         ) {
             Text(
                 text = title,
+                maxLines = 3,
                 style = MaterialTheme.typography.headlineMedium,
             )
             Spacer(modifier = Modifier.height(8.dp))
