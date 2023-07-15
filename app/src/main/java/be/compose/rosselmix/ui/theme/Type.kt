@@ -87,7 +87,7 @@ val RosselMixTypography = Typography(
     headlineLarge = TextStyle(
         fontFamily = Miller,
         fontWeight = FontWeight.ExtraBold,
-        fontSize = 18.sp,
+        fontSize = 24.sp,
         letterSpacing = 1.sp
     ),
 

@@ -29,14 +29,14 @@ sealed class Destinations(val route: String, @StringRes val stringId: Int, @Draw
 fun RosselMoxNavGraph(
     navController: NavHostController = rememberNavController(),
     innerPadding: PaddingValues,
-    startDestination: String = Destinations.NEWS.route
+    startDestination: String = Destinations.LATEST_NEWS.route
 ) {
 
     val actions = remember(navController) { MainActions(navController) }
 
     NavHost(
         navController = navController,
-        startDestination = Destinations.NEWS.route,
+        startDestination = startDestination,
         modifier = Modifier.padding(innerPadding)
     ) {
         composable(Destinations.NEWS.route) {
