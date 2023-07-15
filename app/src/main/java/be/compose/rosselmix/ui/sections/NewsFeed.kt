@@ -28,6 +28,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -53,18 +54,20 @@ import coil.compose.AsyncImage
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.google.accompanist.web.WebView
 import com.google.accompanist.web.rememberWebViewState
+import androidx.lifecycle.viewmodel.compose.viewModel
+
 
 
 @Composable
 fun NewsFeed(
-    viewModel: NewsFeedViewModel,
-    navController: NavHostController
+    navController: NavHostController,
+    viewModel: NewsFeedViewModel = viewModel()
+
 ) {
     Column {
 
-        val viewModel = NewsFeedViewModel()
 
-        val state by  viewModel.state
+        val state by  viewModel.state.collectAsState()
         //WebViewArticle(url = "https://www.lesoir.be/525628/article/2023-07-14/reforme-fiscale-voici-ce-qui-est-sur-la-table-ce-samedi")
 
         if(state.loading) {

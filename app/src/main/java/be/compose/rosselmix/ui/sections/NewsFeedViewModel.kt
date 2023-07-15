@@ -2,22 +2,35 @@ package be.compose.rosselmix.ui.sections
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.SavedStateHandleSaveableApi
+import androidx.lifecycle.viewmodel.compose.saveable
 import be.compose.rosselmix.data.FetcherResponse
 import be.compose.rosselmix.data.NewsFeedFetcher
 import be.compose.rosselmix.data.model.News
 import be.compose.rosselmix.utils.Category
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class NewsFeedViewModel : ViewModel() {
+class NewsFeedViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
 
     private val selectedCategory = MutableStateFlow(Category.BREAKING)
     private val selectedUrl: MutableStateFlow<String?> = MutableStateFlow(null)
 
-    private val _state = mutableStateOf<NewsFeedViewState>(NewsFeedViewState())
-    val state : State<NewsFeedViewState>
+
+
+
+    @OptIn(SavedStateHandleSaveableApi::class)
+    var selectedUrl2: String by savedStateHandle.saveable {
+        mutableStateOf("")
+    }
+
+
+    private val _state = MutableStateFlow<NewsFeedViewState>(NewsFeedViewState())
+    val state : StateFlow<NewsFeedViewState>
         get() = _state
 
     init {

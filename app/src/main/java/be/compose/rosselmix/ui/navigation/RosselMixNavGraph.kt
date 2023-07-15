@@ -40,9 +40,7 @@ fun RosselMoxNavGraph(
         modifier = Modifier.padding(innerPadding)
     ) {
         composable(Destinations.NEWS.route) {
-            NewsFeed(
-                NewsFeedViewModel(),
-                navController)
+            NewsFeed(navController)
         }
         composable(Destinations.LATEST_NEWS.route) {
             LastestNews(navController)
