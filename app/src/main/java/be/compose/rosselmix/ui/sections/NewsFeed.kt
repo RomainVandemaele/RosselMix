@@ -14,21 +14,35 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.ArrowBack
+import androidx.compose.material.icons.outlined.Close
+import androidx.compose.material.icons.outlined.Share
+import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -40,13 +54,14 @@ import androidx.core.content.ContextCompat.startActivity
 import be.compose.rosselmix.R
 import be.compose.rosselmix.ui.theme.DarkBlue
 import be.compose.rosselmix.ui.theme.LightBlue
+import be.compose.rosselmix.ui.theme.RosselMixShapes
+import be.compose.rosselmix.ui.theme.White
 import be.compose.rosselmix.utils.Category
 import coil.compose.AsyncImage
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.google.accompanist.web.WebView
 import com.google.accompanist.web.rememberWebViewState
 
-private const val URL = "https://leseng.rosselcdn.net/sites/default/files/dpistyles_v2/ena_16_9_medium/2023/07/13/node_525253/30290591/public/2023/07/13/b9730411500z.1_20220328074704_000%2Bg3kk6gif9.1-0.jpeg?itok=J3loYTOu1689231371"
 
 @Composable
 fun NewsFeed(
@@ -71,11 +86,19 @@ fun NewsFeed(
                 LazyColumn {
                     items(news.size) { i ->
                         Column {
-                            NewsItem(
-                                news[i].title,
-                                news[i].thumbnailUrl,
-                                news[i].author,
-                                onItemClick = {viewModel.selectArticle(news[i].url) })
+                            if(i==0)  {
+                                MainNews(
+                                    news[i].title,
+                                    news[i].thumbnailUrl,
+                                    news[i].author,
+                                    onItemClick = {viewModel.selectArticle(news[i].url) })
+                            }else {
+                                NewsItem(
+                                    news[i].title,
+                                    news[i].thumbnailUrl,
+                                    news[i].author,
+                                    onItemClick = {viewModel.selectArticle(news[i].url) })
+                            }
                             NewsDivider()
                         }
                     }
@@ -94,22 +117,26 @@ fun CategoryChooser(
     onItemClick: (Int) -> Unit,
     selectedCategory: Category
 ) {
-    LazyRow() {
+    LazyRow(
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
         items(Category.values().size) {
             val cat = Category.values()[it]
             val selected = cat == selectedCategory
-            Spacer(modifier = Modifier.width(8.dp))
             Text(
                 text = cat.topic,
-                color = if(selected) Color.Red else  DarkBlue,
-                fontWeight = FontWeight.Bold,
-                fontSize = MaterialTheme.typography.labelLarge.fontSize,
+                color = if(selected) White else  DarkBlue,
+                style = MaterialTheme.typography.labelLarge,
                 modifier = Modifier
                     .padding(16.dp)
-                    .padding(8.dp)
                     .clickable {
                         onItemClick(cat.code)
                     }
+                    .clip(RosselMixShapes.large)
+                    .background(
+                        if (!selected) MaterialTheme.colorScheme.background else DarkBlue
+                    )
             )
         }
 
@@ -120,7 +147,7 @@ fun CategoryChooser(
 @Composable
 fun LoadingScreen() {
     Image(
-        painter = painterResource(id = R.drawable.lesoir),
+        painter = painterResource(id = R.drawable.load_screen),
         contentDescription = "Loading screen with the logo of Le Soir",
         modifier = Modifier
             .fillMaxWidth()
@@ -133,25 +160,96 @@ fun WebViewArticle(url: String, onDispose: () -> Unit) {
 
     val state = rememberWebViewState(url)
 
-    AndroidView(factory = {
-        WebView(it).apply {
-            webViewClient = WebViewClient()
-            loadUrl(url)
+    Column {
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(0.08f)
+                .background(DarkBlue),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            IconButton(
+                onClick = { onDispose() }
+            ) {
+                Icon( Icons.Outlined.ArrowBack, contentDescription = "Back", tint = Color.White)
+            }
+            Text(
+                text = stringResource(id = R.string.journal_name),
+                color = Color.White,
+                fontWeight = FontWeight.Bold,
+                fontSize = MaterialTheme.typography.labelLarge.fontSize
+            )
+            IconButton(onClick = { TODO("Share url") }) {
+                Icon( Icons.Outlined.Share, contentDescription = "Share", tint = Color.White)
+            }
         }
 
-    })
-    
-    //val state = rememberWebViewState(url)
-//    WebView(
-//        state = state,
-//        //onCreated = {it.settings.javaScriptEnabled = true},
-//        captureBackPresses = false,
-//        onCreated = { it.settings.javaScriptEnabled = true },
-//        onDispose = { Log.d("DISPOSE","disposed");onDispose() }
-//    )
+        WebView(
+            modifier = Modifier
+                .weight(0.92f),
+            state = state,
+            //onCreated = {it.settings.javaScriptEnabled = true},
+            captureBackPresses = false,
+            onCreated = {  }
+        )
+
+
+    }
 
 }
 
+@Composable
+fun share(data : String) {
+    val sendIntent: Intent = Intent().apply {
+        action = Intent.ACTION_SEND
+        putExtra(Intent.EXTRA_TEXT, data)
+        type = "text/plain"
+    }
+
+    val shareIntent = Intent.createChooser(sendIntent, null)
+    startActivity(LocalContext.current,shareIntent,null)
+}
+
+@Composable
+fun MainNews(
+    title : String,
+    thumbnailUrl : String,
+    author: String?,
+    onItemClick: () -> Unit)
+{
+    Column(
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = Modifier
+            .clickable(onClick = onItemClick)
+    ) {
+        AsyncImage(
+            model = thumbnailUrl,
+            contentDescription = "News illustration",
+            contentScale = ContentScale.FillWidth,
+            modifier  = Modifier
+                .fillMaxSize(),
+            error = painterResource(id = R.drawable.lesoir) //placeholder
+        )
+
+        Text(
+            text = title,
+            style = MaterialTheme.typography.headlineMedium,
+            modifier = Modifier.padding(horizontal = 16.dp),
+
+        )
+
+        Text(
+            text =  if ( author.isNullOrBlank())"" else "${stringResource(id = R.string.author_prefix)} $author",
+            style = MaterialTheme.typography.bodySmall,
+            color = DarkBlue,
+            modifier = Modifier.padding(horizontal = 16.dp)
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+    }
+}
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun NewsItem(
@@ -180,11 +278,12 @@ fun NewsItem(
         ) {
             Text(
                 text = title,
-                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.headlineMedium,
             )
+            Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text =  if ( author.isNullOrBlank())"" else "${stringResource(id = R.string.author_prefix)} $author",
-                fontSize = MaterialTheme.typography.bodySmall.fontSize,
+                style = MaterialTheme.typography.bodySmall,
                 color = DarkBlue
             )
         }
@@ -222,5 +321,6 @@ fun NewsDivider() {
 @Composable
 @Preview
 fun NewsItemPreview() {
+    val URL = "https://leseng.rosselcdn.net/sites/default/files/dpistyles_v2/ena_16_9_medium/2023/07/13/node_525253/30290591/public/2023/07/13/b9730411500z.1_20220328074704_000%2Bg3kk6gif9.1-0.jpeg?itok=J3loYTOu1689231371"
     NewsItem("Nothing happened", URL,"BELGA", {  })
 }

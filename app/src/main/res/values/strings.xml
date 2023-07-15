@@ -4,4 +4,5 @@
     <string name="connection_error">Could not connect to fetch the news</string>
     <string name="xml_error">The news were not formated correctly\n</string>
     <string name="author_prefix">Par </string>
+    <string name="journal_name">Le Soir</string>
 </resources>
