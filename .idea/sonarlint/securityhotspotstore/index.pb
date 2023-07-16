@@ -8,8 +8,6 @@ i
 :
 
 .gitignore,a\5\a5cc2925ca8258af241be7e5b0381edf30266302
-P
- app/src/main/AndroidManifest.xml,8\c\8c55c3ccc257e5907959013f99656e4c8ec3903e
 h
 8app/src/main/java/be/compose/rosselmix/ui/theme/Color.kt,6\8\68c86be4d60e7ea599f4c08dda4d7bfc54e44396
 i

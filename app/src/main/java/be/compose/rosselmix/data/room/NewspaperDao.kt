@@ -2,6 +2,7 @@ package be.compose.rosselmix.data.room
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
 
@@ -18,7 +19,7 @@ interface NewspaperDao {
     @Query("SELECT * FROM $TABLE_NAME")
     fun getAll(): Flow<List<Newspaper>>
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(vararg newspapers: Newspaper)
 
 }

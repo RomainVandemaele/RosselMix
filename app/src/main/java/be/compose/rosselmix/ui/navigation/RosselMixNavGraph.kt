@@ -17,8 +17,8 @@ import be.compose.rosselmix.ui.sections.Bookmark
 import be.compose.rosselmix.ui.sections.BookmarkViewModel
 import be.compose.rosselmix.ui.sections.LastestNews
 import be.compose.rosselmix.ui.sections.NewsFeed
-import be.compose.rosselmix.ui.sections.NewsFeedViewModel
-import be.compose.rosselmix.ui.sections.NewsPaper
+import be.compose.rosselmix.ui.sections.Newspaper
+import be.compose.rosselmix.ui.sections.NewspaperViewModel
 
 sealed class Destinations(val route: String, @StringRes val stringId: Int, @DrawableRes val iconId: Int ) {
     object NEWS : Destinations("news", R.string.news, R.drawable.ic_home_foreground)
@@ -31,7 +31,7 @@ sealed class Destinations(val route: String, @StringRes val stringId: Int, @Draw
 fun RosselMoxNavGraph(
     navController: NavHostController = rememberNavController(),
     innerPadding: PaddingValues,
-    startDestination: String = Destinations.NEWSPAPER.route
+    startDestination: String = Destinations.BOOKMARKS.route
 ) {
 
     val actions = remember(navController) { MainActions(navController) }
@@ -48,7 +48,7 @@ fun RosselMoxNavGraph(
             LastestNews(navController)
         }
         composable(Destinations.NEWSPAPER.route) {
-            NewsPaper(navController)
+            Newspaper(navController, NewspaperViewModel.factory(LocalContext.current) )
         }
         composable(Destinations.BOOKMARKS.route) {
             Bookmark(navController, BookmarkViewModel.factory(LocalContext.current) )

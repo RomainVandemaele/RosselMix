@@ -10,4 +10,8 @@
     <string name="newspaper">Le journal</string>
     <string name="bookmarks">Mes articles</string>
     <string name="bookmarked_message">Cette article est ajouté à vos articles</string>
+    <string name="newspapers">journal Metro</string>
+    <string name="metro_logo">journal logo</string>
+    <string name="newspaper_intro">Journal du</string>
+    <string name="open_full_newspaper">Open the journal</string>
 </resources>

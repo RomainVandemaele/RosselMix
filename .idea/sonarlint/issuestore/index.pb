@@ -6,8 +6,6 @@ i
 :
 
 .gitignore,a\5\a5cc2925ca8258af241be7e5b0381edf30266302
-P
- app/src/main/AndroidManifest.xml,8\c\8c55c3ccc257e5907959013f99656e4c8ec3903e
 h
 8app/src/main/java/be/compose/rosselmix/ui/theme/Theme.kt,5\4\543283c67f833773fbf6e11f647b13dd978d831e
 h
