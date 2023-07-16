@@ -14,8 +14,6 @@ h
 8app/src/main/java/be/compose/rosselmix/ui/theme/Color.kt,6\8\68c86be4d60e7ea599f4c08dda4d7bfc54e44396
 i
 9app/src/main/java/be/compose/rosselmix/ui/theme/Shapes.kt,b\4\b43afd46d380c9ee9bd02233b0d2d3a0403d7a08
-o
-?app/src/main/java/be/compose/rosselmix/ui/sections/NewsPaper.kt,8\e\8ed36c7db580885cd0e645b215a7946b877d136d
 n
 >app/src/main/java/be/compose/rosselmix/data/NewsFeedFetcher.kt,c\9\c9909564b23c9c34e59437fd29f83f9968b69b9f
 g

@@ -1,18 +1,16 @@
-package be.compose.rosselmix.data.Room
+package be.compose.rosselmix.data.room
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import be.compose.rosselmix.data.Room.Dao.NewsDao
-import be.compose.rosselmix.data.Room.Entities.News
 
-@Database(entities = [News::class], version = 1, exportSchema = false)
+@Database(entities = [News::class, Newspaper::class] , version = 1, exportSchema = false)
 abstract class RosselMixDatabase : RoomDatabase() {
 
     companion object {
         private const val DATABASE_NAME = "news-database"
-        var instance : RosselMixDatabase? = null
+        private var instance : RosselMixDatabase? = null
 
         fun instance(context: Context): RosselMixDatabase {
             if(instance != null) return instance!!
@@ -28,6 +26,7 @@ abstract class RosselMixDatabase : RoomDatabase() {
 
 
     abstract fun newsDao(): NewsDao
+    abstract fun newspaperDao(): NewspaperDao
 
 
 }

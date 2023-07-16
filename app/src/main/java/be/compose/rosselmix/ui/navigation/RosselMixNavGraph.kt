@@ -31,7 +31,7 @@ sealed class Destinations(val route: String, @StringRes val stringId: Int, @Draw
 fun RosselMoxNavGraph(
     navController: NavHostController = rememberNavController(),
     innerPadding: PaddingValues,
-    startDestination: String = Destinations.BOOKMARKS.route
+    startDestination: String = Destinations.NEWSPAPER.route
 ) {
 
     val actions = remember(navController) { MainActions(navController) }

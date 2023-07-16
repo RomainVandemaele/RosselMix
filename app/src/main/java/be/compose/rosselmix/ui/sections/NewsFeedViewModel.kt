@@ -1,9 +1,7 @@
 package be.compose.rosselmix.ui.sections
 
 import android.content.Context
-import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,14 +9,12 @@ import androidx.lifecycle.viewmodel.compose.SavedStateHandleSaveableApi
 import androidx.lifecycle.viewmodel.compose.saveable
 import be.compose.rosselmix.data.FetcherResponse
 import be.compose.rosselmix.data.NewsFeedFetcher
-import be.compose.rosselmix.data.Room.RosselMixDatabase
+import be.compose.rosselmix.data.room.RosselMixDatabase
 import be.compose.rosselmix.data.model.News
 import be.compose.rosselmix.utils.Category
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlin.coroutines.coroutineContext
 
 class NewsFeedViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
 
@@ -49,7 +45,14 @@ class NewsFeedViewModel(private val savedStateHandle: SavedStateHandle) : ViewMo
 
     public fun bookMarkNews(context : Context, news : News) {
         viewModelScope.launch {
-            getDao(context).insert(be.compose.rosselmix.data.Room.Entities.News(news.title, news.author, news.thumbnailUrl, news.url))
+            getDao(context).insert(
+                be.compose.rosselmix.data.room.News(
+                    news.title,
+                    news.author,
+                    news.thumbnailUrl,
+                    news.url
+                )
+            )
         }
     }
 

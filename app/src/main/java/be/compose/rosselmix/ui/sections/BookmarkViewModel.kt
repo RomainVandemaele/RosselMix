@@ -1,11 +1,10 @@
 package be.compose.rosselmix.ui.sections
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import be.compose.rosselmix.data.Room.RosselMixDatabase
-import be.compose.rosselmix.data.Room.Entities.News
+import be.compose.rosselmix.data.room.RosselMixDatabase
+import be.compose.rosselmix.data.room.News
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -19,7 +18,6 @@ class BookmarkViewModel(val context: Context) : ViewModel() {
         get() = _state
 
     init {
-        Log.d("BookmarkViewModel", "init")
         loadBookmarkedNews(context)
     }
 

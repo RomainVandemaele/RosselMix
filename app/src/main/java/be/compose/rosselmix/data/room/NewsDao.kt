@@ -1,10 +1,8 @@
-package be.compose.rosselmix.data.Room.Dao
+package be.compose.rosselmix.data.room
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
-import be.compose.rosselmix.data.Room.Entities.News
 import kotlinx.coroutines.flow.Flow
 
 @Dao

@@ -17,7 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import be.compose.rosselmix.data.Room.RosselMixDatabase
+import be.compose.rosselmix.data.room.RosselMixDatabase
 import be.compose.rosselmix.ui.navigation.Destinations
 import be.compose.rosselmix.ui.navigation.RosselMoxNavGraph
 import be.compose.rosselmix.ui.theme.DarkBlue

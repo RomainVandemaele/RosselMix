@@ -5,8 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import be.compose.rosselmix.data.FetcherResponse
 import be.compose.rosselmix.data.NewsFeedFetcher
-import be.compose.rosselmix.data.Room.RosselMixDatabase
 import be.compose.rosselmix.data.model.News
+import be.compose.rosselmix.data.room.RosselMixDatabase
 import be.compose.rosselmix.utils.Category
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -61,7 +61,14 @@ class LatestNewsViewModel() : ViewModel() {
 
     public fun bookMarkNews(context : Context, news : News) {
         viewModelScope.launch {
-            getDao(context).insert(be.compose.rosselmix.data.Room.Entities.News(news.title, news.author, news.thumbnailUrl, news.url))
+            getDao(context).insert(
+                be.compose.rosselmix.data.room.News(
+                    news.title,
+                    news.author,
+                    news.thumbnailUrl,
+                    news.url
+                )
+            )
         }
     }
 

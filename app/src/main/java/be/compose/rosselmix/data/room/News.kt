@@ -1,4 +1,4 @@
-package be.compose.rosselmix.data.Room.Entities
+package be.compose.rosselmix.data.room
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

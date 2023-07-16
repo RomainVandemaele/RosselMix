@@ -11,7 +11,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import be.compose.rosselmix.R
-import be.compose.rosselmix.data.Room.Entities.News
+import be.compose.rosselmix.data.room.News
 
 @Composable
 fun Bookmark(
