@@ -14,4 +14,5 @@
     <string name="metro_logo">journal logo</string>
     <string name="newspaper_intro">Journal du</string>
     <string name="open_full_newspaper">Open the journal</string>
+    <string name="journal_name_metro">metro</string>
 </resources>
