@@ -16,7 +16,7 @@ import be.compose.rosselmix.data.Room.Entities.News
 @Composable
 fun Bookmark(
     navController: NavHostController,
-    viewModel: BookmarkViewModel = BookmarkViewModel(LocalContext.current)
+    viewModel: BookmarkViewModel
 ) {
     val context = LocalContext.current
 
@@ -47,7 +47,8 @@ fun BookmarkScreen(news: List<News>, onItemClick: (String) -> Unit, onBookmarkCl
                     news[it].thumbnailUrl,
                     news[it].author,
                     onItemClick = { onItemClick(news[it].articleUrl)},
-                    onBookmarkClick = { onBookmarkClick(news[it]) }
+                    onBookmarkClick = { onBookmarkClick(news[it]) },
+                    outlinedBookmark = true
                 )
                 NewsDivider()
             }

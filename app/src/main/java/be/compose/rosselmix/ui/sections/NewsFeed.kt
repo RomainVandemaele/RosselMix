@@ -1,6 +1,7 @@
 package be.compose.rosselmix.ui.sections
 
 import android.content.Intent
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
@@ -182,8 +183,9 @@ fun LoadingScreen(modifier: Modifier = Modifier) {
 
 @Composable
 fun WebViewArticle(url: String, onDispose: () -> Unit) {
-
+    Log.d("WebViewArticle", "url : $url")
     val state = rememberWebViewState(url)
+
 
     Column {
 
@@ -217,7 +219,6 @@ fun WebViewArticle(url: String, onDispose: () -> Unit) {
             state = state,
             //onCreated = {it.settings.javaScriptEnabled = true},
             captureBackPresses = false,
-            onCreated = {  }
         )
 
 
@@ -313,7 +314,8 @@ fun NewsItem(
     thumbnailUrl: String,
     author: String?,
     onItemClick: () -> Unit,
-    onBookmarkClick: () -> Unit
+    onBookmarkClick: () -> Unit,
+    outlinedBookmark : Boolean = false
 )
 {
 
@@ -329,7 +331,7 @@ fun NewsItem(
 
 
     ) {
-        TitleAndAuthor(title = title, author = author, modifier = Modifier.weight(1f), onBookmarkClick = onBookmarkClick)
+        TitleAndAuthor(title = title, author = author, modifier = Modifier.weight(1f), onBookmarkClick = onBookmarkClick, outlinedBookmark)
         Spacer(modifier = Modifier.width(10.dp))
 
         AsyncImage(
@@ -376,7 +378,7 @@ fun TitleAndAuthor(title: String, author: String?, modifier: Modifier, onBookmar
                 if(bookmarked) Toast.makeText(context,bookmarkText,Toast.LENGTH_LONG).show()
                           } )
             { Icon(
-                painterResource(id = if(bookmarked) R.drawable.ic_bookmark_foreground else R.drawable.ic_bookmark_filled_foreground),
+                painterResource(id = if(bookmarked) R.drawable.ic_bookmark_filled_foreground else R.drawable.ic_bookmark_foreground),
                 contentDescription = "Bookmark", tint = DarkBlue) }
 
             Text(

@@ -7,12 +7,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import be.compose.rosselmix.R
 import be.compose.rosselmix.ui.sections.Bookmark
+import be.compose.rosselmix.ui.sections.BookmarkViewModel
 import be.compose.rosselmix.ui.sections.LastestNews
 import be.compose.rosselmix.ui.sections.NewsFeed
 import be.compose.rosselmix.ui.sections.NewsFeedViewModel
@@ -29,7 +31,7 @@ sealed class Destinations(val route: String, @StringRes val stringId: Int, @Draw
 fun RosselMoxNavGraph(
     navController: NavHostController = rememberNavController(),
     innerPadding: PaddingValues,
-    startDestination: String = Destinations.LATEST_NEWS.route
+    startDestination: String = Destinations.BOOKMARKS.route
 ) {
 
     val actions = remember(navController) { MainActions(navController) }
@@ -49,7 +51,7 @@ fun RosselMoxNavGraph(
             NewsPaper(navController)
         }
         composable(Destinations.BOOKMARKS.route) {
-            Bookmark(navController)
+            Bookmark(navController, BookmarkViewModel.factory(LocalContext.current) )
         }
         //TODO: add other routes like webview and pdfview with url as parameter
     }

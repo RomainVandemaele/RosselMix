@@ -1,14 +1,13 @@
 package be.compose.rosselmix.ui.sections
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import be.compose.rosselmix.data.Room.RosselMixDatabase
 import be.compose.rosselmix.data.Room.Entities.News
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class BookmarkViewModel(val context: Context) : ViewModel() {
@@ -20,6 +19,7 @@ class BookmarkViewModel(val context: Context) : ViewModel() {
         get() = _state
 
     init {
+        Log.d("BookmarkViewModel", "init")
         loadBookmarkedNews(context)
     }
 
@@ -44,6 +44,10 @@ class BookmarkViewModel(val context: Context) : ViewModel() {
         }
     }
 
+    companion object {
+        //TODO : better factory than can be used ad parameter in viewModel() function
+        fun factory(context: Context) = BookmarkViewModel(context)
+    }
 
 }
 

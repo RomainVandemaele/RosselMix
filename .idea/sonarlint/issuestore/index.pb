@@ -16,12 +16,8 @@ i
 9app/src/main/java/be/compose/rosselmix/ui/theme/Shapes.kt,b\4\b43afd46d380c9ee9bd02233b0d2d3a0403d7a08
 o
 ?app/src/main/java/be/compose/rosselmix/ui/sections/NewsPaper.kt,8\e\8ed36c7db580885cd0e645b215a7946b877d136d
-f
-6app/src/main/java/be/compose/rosselmix/MainActivity.kt,3\4\34ba0a9063ed188c96206331c59368beced99da1
 n
 >app/src/main/java/be/compose/rosselmix/data/NewsFeedFetcher.kt,c\9\c9909564b23c9c34e59437fd29f83f9968b69b9f
-y
-Iapp/src/main/java/be/compose/rosselmix/ui/navigation/RosselMixNavGraph.kt,0\8\08f1022ae8a0e174347aeecf6a17784ff15b9aa4
 g
 7app/src/main/java/be/compose/rosselmix/ui/theme/Type.kt,3\c\3cc04809bd897999abbc536866b76756d6a626c5
 <
