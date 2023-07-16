@@ -1,5 +1,6 @@
 package be.compose.rosselmix.ui.sections
 
+import android.content.Context
 import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -22,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -61,7 +63,8 @@ fun LastestNews(
                 Spacer(modifier = Modifier.height(16.dp))
                 NewsList(
                     state.value.latestNews,
-                    onClick = viewModel::selectArticle
+                    onClick = viewModel::selectArticle,
+                    onBookmarkClick = viewModel::bookMarkNews
                 )
             }
         }
@@ -70,18 +73,20 @@ fun LastestNews(
 
 @Composable
 fun NewsList(
-    news : List<News>,
-    onClick : (String) -> Unit = {} ) {
+    news: List<News>,
+    onClick: (String) -> Unit = {},
+    onBookmarkClick: (Context, News) -> Unit
+) {
+    val context = LocalContext.current
     LazyColumn() {
         items(news.size) {
             LatestNewsItem(
                 news[it].title,
                 news[it].thumbnailUrl,
                 news[it].date,
-                news[it].author)
-                {
-                    onClick(news[it].url)
-                }
+                news[it].author,
+                onClick = { onClick(news[it].url) },
+                onBookmarkClick = { onBookmarkClick(context,news[it]) } )
             NewsDivider()
         }
     }
@@ -94,7 +99,9 @@ fun LatestNewsItem(
     thumbnailUrl: String,
     date: Date,
     author : String?,
-    onClick : () -> Unit  )
+    onClick : () -> Unit,
+    onBookmarkClick : () -> Unit
+)
 {
 
 
@@ -139,23 +146,9 @@ fun LatestNewsItem(
 
         }
 
+        TitleAndAuthor(title = title, author = author, modifier = Modifier.weight(0.55f), onBookmarkClick =  { onBookmarkClick() })
 
-        Column(
-            modifier = Modifier.weight(0.55f),
-            verticalArrangement = Arrangement.Center
-        ) {
-            Text(
-                text = title,
-                maxLines = 3,
-                style = MaterialTheme.typography.headlineMedium,
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text =  if ( author.isNullOrBlank())"" else "${stringResource(id = R.string.author_prefix)} $author",
-                style = MaterialTheme.typography.bodySmall,
-                color = DarkBlue
-            )
-        }
+
         AsyncImage(
             model = thumbnailUrl,
             alignment = Alignment.Center,
@@ -208,8 +201,8 @@ fun NewsPreview() {
         "Title",
         "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png",
         Date(),
-        "Author"
-    ) {}
+        "Author", {} , {}
+    )
 
 }
 

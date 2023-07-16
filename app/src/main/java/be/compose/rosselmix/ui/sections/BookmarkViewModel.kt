@@ -1,11 +1,17 @@
 package be.compose.rosselmix.ui.sections
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
-import be.compose.rosselmix.data.model.News
+import androidx.lifecycle.viewModelScope
+import be.compose.rosselmix.data.Room.RosselMixDatabase
+import be.compose.rosselmix.data.Room.Entities.News
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
-class BookmarkViewModel : ViewModel() {
+class BookmarkViewModel(val context: Context) : ViewModel() {
 
     private val _state = MutableStateFlow<BookmarkedNewsViewState>(BookmarkedNewsViewState())
     private val selectedUrl: MutableStateFlow<String?> = MutableStateFlow(null)
@@ -14,12 +20,28 @@ class BookmarkViewModel : ViewModel() {
         get() = _state
 
     init {
-        //TODO: Load bookmarked news from database
+        loadBookmarkedNews(context)
+    }
+
+    private fun loadBookmarkedNews(context: Context) {
+        viewModelScope.launch {
+            getDao(context).getAll().collect() {
+                _state.value = _state.value.copy(bookmarkedNews = it)
+            }
+        }
     }
 
     fun selectArticle(url: String?) {
         selectedUrl.value = url
         _state.value = _state.value.copy(selectedArticle = selectedUrl.value)
+    }
+
+    private fun getDao(context : Context) = RosselMixDatabase.instance(context).newsDao()
+
+    fun removeBookMark(context: Context, news: News) {
+        viewModelScope.launch {
+            getDao(context).delete(news.title)
+        }
     }
 
 

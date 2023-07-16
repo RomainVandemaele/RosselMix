@@ -1,9 +1,11 @@
 package be.compose.rosselmix.ui.sections
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import be.compose.rosselmix.data.FetcherResponse
 import be.compose.rosselmix.data.NewsFeedFetcher
+import be.compose.rosselmix.data.Room.RosselMixDatabase
 import be.compose.rosselmix.data.model.News
 import be.compose.rosselmix.utils.Category
 import kotlinx.coroutines.Dispatchers
@@ -53,6 +55,14 @@ class LatestNewsViewModel() : ViewModel() {
     fun selectArticle(url: String?) {
         selectedUrl.value = url
         _state.value = _state.value.copy(selectedArticle = selectedUrl.value)
+    }
+
+    private fun getDao(context : Context) = RosselMixDatabase.instance(context).newsDao()
+
+    public fun bookMarkNews(context : Context, news : News) {
+        viewModelScope.launch {
+            getDao(context).insert(be.compose.rosselmix.data.Room.Entities.News(news.title, news.author, news.thumbnailUrl, news.url))
+        }
     }
 
 }

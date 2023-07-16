@@ -353,7 +353,7 @@ fun NewsItem(
 
 
 @Composable
-fun TitleAndAuthor(title: String, author: String?, modifier: Modifier, onBookmarkClick: () -> Unit) {
+fun TitleAndAuthor(title: String, author: String?, modifier: Modifier, onBookmarkClick: () -> Unit, bookmarked: Boolean = false) {
     val context = LocalContext.current
     val bookmarkText = stringResource(id = R.string.bookmarked_message)
 
@@ -370,10 +370,15 @@ fun TitleAndAuthor(title: String, author: String?, modifier: Modifier, onBookmar
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
-            IconButton(onClick = { onBookmarkClick(); Toast.makeText(context,bookmarkText,Toast.LENGTH_LONG).show() } , modifier = Modifier.size(20.dp)) {
-                Icon( painterResource(id = R.drawable.ic_bookmark_foreground), contentDescription = "Bookmark", tint = DarkBlue)
+            IconButton( modifier = Modifier.size(20.dp),
+                onClick = {
+                onBookmarkClick();
+                if(bookmarked) Toast.makeText(context,bookmarkText,Toast.LENGTH_LONG).show()
+                          } )
+            { Icon(
+                painterResource(id = if(bookmarked) R.drawable.ic_bookmark_foreground else R.drawable.ic_bookmark_filled_foreground),
+                contentDescription = "Bookmark", tint = DarkBlue) }
 
-            }
             Text(
                 text =  if ( author.isNullOrBlank())"" else "${stringResource(id = R.string.author_prefix)} $author",
                 style = MaterialTheme.typography.bodySmall,
