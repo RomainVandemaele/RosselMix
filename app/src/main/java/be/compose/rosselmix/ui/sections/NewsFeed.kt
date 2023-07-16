@@ -375,7 +375,7 @@ fun TitleAndAuthor(title: String, author: String?, modifier: Modifier, onBookmar
             IconButton( modifier = Modifier.size(20.dp),
                 onClick = {
                 onBookmarkClick();
-                if(bookmarked) Toast.makeText(context,bookmarkText,Toast.LENGTH_LONG).show()
+                if(!bookmarked) Toast.makeText(context,bookmarkText,Toast.LENGTH_LONG).show()
                           } )
             { Icon(
                 painterResource(id = if(bookmarked) R.drawable.ic_bookmark_filled_foreground else R.drawable.ic_bookmark_foreground),

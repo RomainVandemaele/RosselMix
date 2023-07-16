@@ -18,7 +18,5 @@ g
 7app/src/main/java/be/compose/rosselmix/ui/theme/Type.kt,3\c\3cc04809bd897999abbc536866b76756d6a626c5
 <
 build.gradle,f\0\f07866736216be0ee2aba49e392191aeae700a35
-@
-app/build.gradle,f\4\f4a01d6a4fcb971362ec00a83903fd3902f52164
 i
 9app/src/main/java/be/compose/rosselmix/data/model/News.kt,6\6\666c750bba0363d18bfe2b177cde4e7dea72b083

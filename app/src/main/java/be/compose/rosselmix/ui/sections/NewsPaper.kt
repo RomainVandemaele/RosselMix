@@ -1,12 +1,17 @@
 package be.compose.rosselmix.ui.sections
 
+import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Icon
@@ -25,6 +30,9 @@ import be.compose.rosselmix.R
 import be.compose.rosselmix.data.room.Newspaper
 import be.compose.rosselmix.ui.theme.DarkBlue
 import be.compose.rosselmix.ui.theme.LightBlue
+import com.rizzi.bouquet.ResourceType
+import com.rizzi.bouquet.VerticalPDFReader
+import com.rizzi.bouquet.rememberVerticalPdfReaderState
 
 @Composable
 fun Newspaper(navController: NavHostController, viewModel: NewspaperViewModel) {
@@ -35,10 +43,18 @@ fun Newspaper(navController: NavHostController, viewModel: NewspaperViewModel) {
 
     if(state.value.selectedNewspaper != null) {
         //TODO : download pdf and open newspaper in pdfView
+        val testUrl = "https://www.publicprocurement.be/sites/default/files/documents/man_um_enterprises_en_20200331_0.pdf"
+        Log.d("Newspaper pdf ", "Newspaper: ${state.value.selectedNewspaper}")
+        val pdfState = rememberVerticalPdfReaderState(
+            resource = ResourceType.Remote(state.value.selectedNewspaper!!),
+            isZoomEnable = true
+        )
+
+        VerticalPDFReader(state = pdfState, modifier = Modifier.fillMaxSize().background(LightBlue))
     }else {
         NewspaperScreen(
             state.value.newspapers,
-            onItemClick = { url : String -> viewModel.selectNewspaper(null) } //TODO change null top url
+            onItemClick = { url : String -> viewModel.selectNewspaper(url) }
         )
     }
 }
@@ -69,7 +85,7 @@ fun urlBuilder(newspaper: Newspaper) : String {
         .append("/FULL/pdf_d-")
         .append("${dateInfo[2]}${dateInfo[1]}${dateInfo[0]}-")
         .append("${newspaper.code}.pdf?id=d-")
-        .append("${dateInfo[2]}${dateInfo[1]}${dateInfo[0]}-")
+        .append("${dateInfo[2]}${dateInfo[1]}${dateInfo[0].toInt() - 1}-") //TODO fix instead of -1 day before
         .append("${newspaper.code}&auth=")
         .append(newspaper.auth)
     return url.toString()

@@ -21,7 +21,26 @@ class NewspaperViewModel(val context : Context) : ViewModel() {
         viewModelScope.launch {
             getDao().getAll().collect() {
                 _state.value = _state.value.copy(newspapers = it)
+                if(it.isEmpty()) {
+                    initialInsert()
+                }
             }
+        }
+    }
+
+    private fun initialInsert() {
+
+
+        viewModelScope.launch {
+            getDao().insertAll(
+                Newspaper("14/07/2023","H0JJQY","a7559"),
+                Newspaper("12/07/2023","H0HE4R","af782"),
+                Newspaper("10/07/2023","H0GJXC","ad044"),
+                Newspaper("07/07/2023","H0EWT5","ae18d"),
+                Newspaper("05/07/2023","H0DGA8","af8b9"),
+                Newspaper("03/07/2023","H0CEZU","a2807"),
+                Newspaper("30/06/2023","H09WX5","a6109")
+            )
         }
     }
 
