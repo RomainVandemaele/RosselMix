@@ -1,6 +1,4 @@
 
-i
-9app/src/main/java/be/compose/rosselmix/data/NewsParser.kt,f\5\f5058e8f1d7eb06db02abee0c650fcc0fa3b50b9
 :
 
 .gitignore,a\5\a5cc2925ca8258af241be7e5b0381edf30266302
@@ -28,7 +26,5 @@ y
 Iapp/src/main/java/be/compose/rosselmix/ui/sections/LatestNewsViewModel.kt,7\2\72d113a6c1c1fc6f1e28cba435e6c4cb75971b9a
 n
 >app/src/main/java/be/compose/rosselmix/ui/sections/Bookmark.kt,9\5\95b25e0f241e2339973df553801579920dc01240
-y
-Iapp/src/main/java/be/compose/rosselmix/ui/navigation/RosselMixNavGraph.kt,0\8\08f1022ae8a0e174347aeecf6a17784ff15b9aa4
 p
 @app/src/main/java/be/compose/rosselmix/data/room/NewspaperDao.kt,4\d\4dd401d768372abe7cfafd64b2937e6d7ff6fd29
