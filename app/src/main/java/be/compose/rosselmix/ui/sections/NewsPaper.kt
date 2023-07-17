@@ -1,22 +1,17 @@
 package be.compose.rosselmix.ui.sections
 
 import android.content.Context
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBack
-import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -26,6 +21,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -36,7 +32,7 @@ import be.compose.rosselmix.R
 import be.compose.rosselmix.data.room.Newspaper
 import be.compose.rosselmix.ui.theme.DarkBlue
 import be.compose.rosselmix.ui.theme.LightBlue
-import be.compose.rosselmix.ui.utils.DownloadPdf
+import be.compose.rosselmix.ui.utils.AndroidDownloader
 import com.rizzi.bouquet.ResourceType
 import com.rizzi.bouquet.VerticalPDFReader
 import com.rizzi.bouquet.rememberVerticalPdfReaderState
@@ -51,7 +47,6 @@ fun Newspaper(navController: NavHostController, viewModel: NewspaperViewModel) {
     if(state.value.selectedNewspaper != null) {
         //TODO : download pdf and open newspaper in pdfView
 
-        DownloadPdf(url = state.value.selectedNewspaper!!, title = "metro.pdf" )
         PdfReader(url = state.value.selectedNewspaper!!, onDispose = { viewModel.selectNewspaper(null) })
 
     }else {
@@ -118,11 +113,19 @@ fun PdfReader(
 
 @Composable
 fun NewspaperScreen(newspapers: List<Newspaper>, onItemClick: (String) -> Unit) {
+    val context = LocalContext.current
     Column {
         Header(title = R.string.newspapers)
         LazyColumn()   {
             items(newspapers.size) {
-                NewspaperItem( newspapers[it].date ,onItemClick = { onItemClick( urlBuilder(newspapers[it])) } )
+                val url = urlBuilder(newspapers[it])
+                NewspaperItem(
+                    newspapers[it].date ,
+                    onItemClick = { onItemClick( url ) },
+                 onDownloadClick = {
+                    val downloader: AndroidDownloader = AndroidDownloader(context)
+                    downloader.downloadFile(url, "metro ${newspapers[it].date}.pdf")
+                })
                 NewsDivider()
             }
         }
@@ -133,7 +136,7 @@ fun NewspaperScreen(newspapers: List<Newspaper>, onItemClick: (String) -> Unit) 
 
 
 @Composable
-fun NewspaperItem(date: String, onItemClick: () -> Unit) {
+fun NewspaperItem(date: String, onItemClick: () -> Unit, onDownloadClick: () -> Long) {
     val dateInfo = date.split("/")
     Row(
 
@@ -150,9 +153,9 @@ fun NewspaperItem(date: String, onItemClick: () -> Unit) {
             style = MaterialTheme.typography.bodyMedium,
             color = LightBlue
         )
-        IconButton(onClick = onItemClick) {
+        IconButton(onClick = { onDownloadClick() }) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_open_full_foreground),
+                painter = painterResource(id = R.drawable.round_file_download_24),
                 contentDescription = stringResource(id = R.string.open_full_newspaper) ,
                 tint = DarkBlue
             )
@@ -164,7 +167,6 @@ fun NewspaperItem(date: String, onItemClick: () -> Unit) {
 fun urlBuilder(newspaper: Newspaper) : String {
     val url = StringBuilder()
     val dateInfo = newspaper.date.split("/")
-    //val x = "https://journal.metrotime.be/rm/prod/free/Metro%3AFR%3Aweb%2C2023-07-14%2CALL/ME_JOURNAL/2023-07-14/FULL/pdf_d-20230713-H0JJQY.pdf?id=d-20230713-H0JJQY&auth=a7559"
     url.append("https://journal.metrotime.be/rm/prod/free/Metro%3AFR%3Aweb%2C")
         .append("${dateInfo[2]}-${dateInfo[1]}-${dateInfo[0]}")
         .append("%2CALL/ME_JOURNAL/")

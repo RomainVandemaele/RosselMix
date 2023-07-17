@@ -1,41 +1,33 @@
 package be.compose.rosselmix.ui.utils
 
 import android.app.DownloadManager
-import android.content.BroadcastReceiver
 import android.content.Context
-import android.net.Uri
 import android.os.Environment
-import android.widget.Toast
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
-import androidx.core.content.ContextCompat.getSystemService
-import androidx.core.content.getSystemService
+import android.os.Environment.getDataDirectory
+import androidx.core.net.toUri
 
 
-@Composable
-fun DownloadPdf(url : String, title : String) {
+interface Downloader {
+    fun downloadFile(url : String, title : String) : Long
+}
 
-    val request =
-        DownloadManager
-            .Request(Uri.parse(url))
+class AndroidDownloader(private val context: Context ) : Downloader {
+
+    private val downloadManager = context.getSystemService(DownloadManager::class.java) as DownloadManager
+    override fun downloadFile(url: String, title: String): Long {
+        val requet = DownloadManager.Request(url.toUri())
+            .setMimeType("application/pdf")
             .setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI or DownloadManager.Request.NETWORK_MOBILE)
             .setAllowedOverRoaming(false)
-            .setTitle("Downloading PDF")
-            .setDescription("Downloading $title")
-            .setVisibleInDownloadsUi(true)
             .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-            .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "$title.pdf")
-            .setMimeType("application/pdf")
+            .setTitle("Downloading journal PDF")
+            .setDescription("Downloading $title")
+            .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "$title.pdf") //TODO fix for recent API > 32 scoped storage
+            //.setDestinationInExternalFilesDir(context, context.filesDir.absolutePath, "$title.pdf")
 
+        return downloadManager.enqueue(requet)
 
-    val context = LocalContext.current
-
-    val mgr = context.getSystemService<DownloadManager>()
-
-    //val downloadManager = getSystemService(context2,context) as DownloadManager
-
-    val refId =  mgr!!.enqueue(request)
-    Toast.makeText(LocalContext.current, "PDF Download Started", Toast.LENGTH_SHORT).show();
-
-
+    }
 }
+
+
